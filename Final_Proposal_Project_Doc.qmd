@@ -1,0 +1,486 @@
+---
+title: "final-proposal-project"
+author: "Oluwadamilare 'Damilare' Adekunle"
+format: html
+execute:
+  echo: false
+  eval: true
+  warning: false
+  message: false
+editor: visual
+---
+
+## Examining Social Connection, Emotional Support, and Mental Distress Among Georgia Adults
+
+Social connection encompasses the number and variety of a person’s relationships, the roles those relationships play in daily life, and whether they provide positive support or create strain (CDC, 2024). It describes how individuals connect with others and the extent to which those relationships provide support, belonging, and substantial engagement. When this connection diminishes, social disconnection may occur. Two of which are social isolation (limited roles and engagement with others) and loneliness (dissatisfaction with one’s level of social connection) (World Health Organization, 2025). These suggest the challenges that may occur when social connection is not met. These forms (i.e., loneliness and social isolation) affect some populations more frequently, including older adults, young adults, individuals living alone, immigrants, adults identifying as sexual minorities, and financially vulnerable adults, while making individuals more vulnerable to depression, dementia, self-harm, type 2 diabetes, anxiety, stroke, and suicide-related outcomes (Centers for Disease Control and Prevention, 2024). 
+
+More importantly, social connection is linked to several components, one of which is emotional support. Emotional support is a form of social support which involves understanding, acceptance, compassion, and genuine concern (Drageset, 2021; Substance Abuse and Mental Health Services Administration, 2023). This indicates a sense of support where positive and reliable emotional exchanges exist. Emotional support plays a crucial role in the well-being and health of individuals, as well as providing perceived stability (Drageset, 2021), illustrating its significance in the lives of individuals. According to CDC (2024), social connections provide individuals with emotional support, which individuals can benefit from when facing both difficult and good moments. This indicates the level of encouragement that can be provided when positive life experiences and challenging situations occur. 
+
+Furthermore, individuals who have limited meaningful interactions, support systems, or a sense of belonging are more likely to experience emotional challenges such as depressive symptoms, anxious feelings, self-harming thoughts, and poorer psychological well-being over time (Centers for Disease Control and Prevention, 2024). This suggests that people tend to experience poorer emotional health when they lack strong relationships and regular engagement with others. A broad review of longitudinal studies also found that people who maintain stronger relationships, dependable support systems, and regular engagement with others generally report fewer symptoms associated with depression and anxiety, whereas those with weaker interpersonal ties face greater psychological difficulties over time (Wickramaratne et al., 2022). This indicates that having dependable people in one's life may help protect against emotional strain and psychological distress. Authors of these studies also explained that feelings of disconnection and the absence of close interpersonal bonds were consistently linked to greater emotional difficulties, with several studies showing that these experiences often preceded increases in depressive and anxiety-related symptoms (Wickramaratne et al., 2022). This suggests that emotional separation from others may contribute to later declines in psychological well-being. 
+
+Nonetheless, there are resources and organizations that support and ensure social connection, peer support, community care, emotional support are provided, ensuring that there are support systems for mental health. Some of these are state agencies, local partners, communities, and non-profit organizations, such as Mental Health America (MHA), 988 suicide and crisis lifeline, GUIDE Inc., National Alliance on Mental Illness (NAMI), and The Trevor Project. The audience for this project extends to community mental health centers, program managers planning mental and wellness initiatives, nonprofits (serving low-income adults and minority communities), faith-based organization, and policymakers allocating resources to improve social connection and emotional support, in a way depicting the goal of this project. The purpose of this project is to examine social and emotional support and frequent mental distress among adults in Georgia using CDC BRFSS data. The project also seeks to identify demographic groups that experience higher levels of emotional or social support deficits and mental distress to inform public health programs, outreach efforts, and resource allocation. 
+
+
+## Loading the XPT File and Needed Packages
+
+```{r, echo = FALSE}
+library(haven)
+library(tidyverse)
+library(dplyr)
+library(knitr)
+
+brfss <- read_xpt("data/LLCP2025.XPT")
+```
+
+## BRFSS Entire Dataset
+
+```{r, echo = FALSE}
+nrow(brfss)
+# to check the dataset
+```
+
+## Filtering to Intended State (Georgia = 13)
+
+```{r, echo = FALSE}
+ga <- brfss %>%
+  filter(`_STATE` == 13)
+
+glimpse(ga)
+# Georgia numerical code is 13
+```
+
+## Creating the Analysis Variable
+
+```{r, echo = FALSE}
+ga_checked <- ga %>%
+  mutate(
+    # EMTSUPRT codes: 1=Always, 2=Usually, 3=Sometimes, 4=Rarely, 5=Never
+    support_low = case_when(
+  EMTSUPRT %in% c(3, 4, 5) ~ 1,
+  EMTSUPRT %in% c(1, 2) ~ 0,
+  TRUE ~ NA_real_
+),
+    
+    # Frequent mental distress = 14+ poor mental health days
+    mental_distress = case_when(
+      MENTHLTH %in% 1:30 & MENTHLTH >= 14 ~ 1,
+      MENTHLTH %in% 1:30 & MENTHLTH < 14 ~ 0,
+      MENTHLTH == 88 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    
+    # BRFSS pre-made age groups
+    age_group = `_AGEG5YR`,
+    
+    # BRFSS sex variable
+    sex = SEXVAR,
+    
+    # BRFSS income categories
+    income = INCOME3,
+    
+    # BRFSS race/ethnicity categories
+    race_ethnicity = `_RACEGR3`
+  )
+# Low social/emotional support, frequent mental distress, and other subgroups are defined. Thus, for BRFSS, social/emotional support = EMTSUPRT, poor mental health days = MENTHLTH, age = AGE80 or AGEG5YR (pre-made age groups), sex (male vs female) = SEXVAR, income categories = INCOME3, race/ethnicity groups = RACEGR3 
+```
+
+## Summarizing the Variables by Subgroups
+
+### Age SubGroup
+
+```{r, echo = FALSE}
+summary_by_age <- ga_checked %>%
+  mutate(
+    age_group = factor(
+      age_group,
+      levels = 1:14,
+      labels = c(
+        "18–24",
+        "25–29",
+        "30–34",
+        "35–39",
+        "40–44",
+        "45–49",
+        "50–54",
+        "55–59",
+        "60–64",
+        "65–69",
+        "70–74",
+        "75–79",
+        "80+",
+        "Don't know / Refused / Missing"
+      )
+    )
+  ) %>%
+  group_by(age_group) %>%
+  summarize(
+    pct_low_support = mean(support_low, na.rm = TRUE) * 100,
+    pct_mental_distress = mean(mental_distress, na.rm = TRUE) * 100
+  )
+
+knitr::kable(summary_by_age, caption = "Summary by Age Group")
+
+```
+
+### Sex SubGroup
+
+```{r}
+summary_by_sex <- ga_checked %>%
+  mutate(sex = ifelse(sex ==1, "Male", "Female")) %>%
+  group_by(sex) %>%
+  summarize(
+    pct_low_support = mean(support_low, na.rm = TRUE) * 100,
+    pct_mental_distress = mean(mental_distress, na.rm = TRUE) * 100
+  )
+
+knitr::kable(summary_by_sex, caption = "Summary by Sex Group")
+```
+
+### Income
+
+```{r, echo = FALSE}
+library(forcats)
+
+summary_by_income <- ga_checked %>%
+  mutate(
+    income = factor(
+      income,
+      levels = c(1,2,3,4,5,6,7,8,9,10,11,77,99),
+      labels = c(
+        "Less than $10,000",
+        "Less than $15,000 ($10k–<15k)",
+        "Less than $20,000 ($15k–<20k)",
+        "Less than $25,000 ($20k–<25k)",
+        "Less than $35,000 ($25k–<35k)",
+        "Less than $50,000 ($35k–<50k)",
+        "Less than $75,000 ($50k–<75k)",
+        "Less than $100,000 ($75k–<100k)",
+        "Less than $150,000 ($100k–<150k)",
+        "Less than $200,000 ($150k–<200k)",
+        "$200,000 or more",
+        "Don't know / Not sure",
+        "Refused"
+      )
+    ),
+    income = fct_explicit_na(income, na_level = "Missing")
+  ) %>% 
+  group_by(income) %>%
+  summarize(
+    pct_low_support = mean(support_low, na.rm = TRUE) * 100,
+    pct_mental_distress = mean(mental_distress, na.rm = TRUE) * 100
+  )
+
+knitr::kable(summary_by_income, caption = "Summary by Income Group")
+```
+
+### Race/Ethnicity
+
+```{r}
+summary_by_race <- ga_checked %>%
+   mutate(
+    race_ethnicity = factor(
+      race_ethnicity,
+      levels = c(1, 2, 3, 4, 5, 9),
+      labels = c(
+        "White only, Non-Hispanic",
+        "Black only, Non-Hispanic",
+        "Other race only, Non-Hispanic",
+        "Multiracial, Non-Hispanic",
+        "Hispanic",
+        "Don't know / Not sure / Refused"
+      )
+    ),
+    race_ethnicity = fct_explicit_na(race_ethnicity, na_level = "Missing")
+  ) %>%
+  group_by(race_ethnicity) %>%
+  summarize(
+    pct_low_support = mean(support_low, na.rm = TRUE) * 100,
+    pct_mental_distress = mean(mental_distress, na.rm = TRUE) * 100
+  )
+
+knitr::kable(summary_by_race, caption = "Summary by Race/Ethnicity Group")
+```
+
+## Creating the Explanatory Visualizations (Each Subgroups)
+
+### Age Visualizations
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+summary_by_age_plot <- summary_by_age %>%
+  filter(age_group != "Don't know / Refused / Missing")
+
+ggplot(
+  summary_by_age_plot,
+  aes(
+    x = age_group,
+    y = pct_low_support
+  )
+) +
+  geom_col(
+  fill = "#2C7FB8",
+  width = 0.7
+) +
+geom_text(
+  aes(
+    label = round(pct_low_support, 1)
+  ),
+  vjust = -0.4,
+  size = 4,
+  fontface = "bold"
+) +
+  labs(
+    title = "Low Social and Emotional Support Is Most Common Among Younger Georgia Adults",
+    subtitle = "Georgia BRFSS 2025",
+    x = "Age Group",
+    y = "Percent Reporting Low Social/Emotional Support",
+    caption = "Source: CDC BRFSS 2025"
+  ) +
+ scale_y_continuous(
+  limits = c(0, 35),
+  breaks = seq(0, 35, 5)
+) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    plot.subtitle = element_text(
+      size = 12
+    ),
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1,
+      size = 11
+    ),
+    axis.title = element_text(
+      size = 12
+    )
+  )
+```
+
+### Income Visualizations
+
+```{r}
+#| fig-width: 12
+#| fig-height: 6
+
+summary_by_income_plot <- summary_by_income %>%
+  filter(
+    !income %in% c(
+      "Don't know / Not sure",
+      "Refused",
+      "Missing"
+    )
+  )
+
+ggplot(
+  summary_by_income_plot,
+  aes(
+    x = income,
+    y = pct_low_support
+  )
+) +
+  geom_col(
+    fill = "#2C7FB8",
+    width = 0.7
+  ) +
+  geom_text(
+    aes(
+      label = round(pct_low_support, 1)
+    ),
+    vjust = -0.4,
+    size = 4,
+    fontface = "bold"
+  ) +
+  labs(
+    title = "Lower-Income Adults Report Higher Levels of Low Social and Emotional Support",
+    subtitle = "Georgia BRFSS 2025",
+    x = "Income Group",
+    y = "Percent Reporting Low Social/Emotional Support",
+    caption = "Source: CDC BRFSS 2025"
+  ) +
+  scale_y_continuous(
+    limits = c(0, 50),
+    breaks = seq(0, 50, 5)
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1,
+      size = 10
+    )
+  )
+```
+
+### Race/Ethnicity Chart
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+summary_by_race_plot <- summary_by_race %>%
+  filter(race_ethnicity != "Don't know / Not sure / Refused")
+
+ggplot(
+  summary_by_race_plot,
+  aes(
+    x = race_ethnicity,
+    y = pct_low_support
+  )
+) +
+  geom_col(
+    fill = "#2C7FB8",
+    width = 0.7
+  ) +
+  geom_text(
+    aes(
+      label = round(pct_low_support, 1)
+    ),
+    vjust = -0.4,
+    size = 4,
+    fontface = "bold"
+  ) +
+  labs(
+    title = "Low Social and Emotional Support Varies Across Racial and Ethnic Groups",
+    subtitle = "Georgia BRFSS 2025",
+    x = "Race/Ethnicity Group",
+    y = "Percent Reporting Low Social/Emotional Support",
+    caption = "Source: CDC BRFSS 2025"
+  ) +
+  scale_y_continuous(
+    limits = c(0, 40),
+    breaks = seq(0, 40, 5)
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    plot.subtitle = element_text(
+      size = 12
+    ),
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1,
+      size = 11
+    ),
+    axis.title = element_text(
+      size = 12
+    )
+  )
+```
+
+### Full Mental Distress by Age Chart
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+
+summary_by_age_plot <- summary_by_age %>%
+  filter(age_group != "Don't know / Refused / Missing")
+
+ggplot(
+  summary_by_age_plot,
+  aes(
+    x = age_group,
+    y = pct_mental_distress
+  )
+) +
+  geom_col(
+    fill = "#8E44AD",
+    width = 0.7
+  ) +
+  geom_text(
+    aes(
+      label = round(pct_mental_distress, 1)
+    ),
+    vjust = -0.4,
+    size = 4,
+    fontface = "bold"
+  ) +
+  labs(
+    title = "Frequent Mental Distress Is Highest Among Younger Georgia Adults",
+    subtitle = "Georgia BRFSS 2025",
+    x = "Age Group",
+    y = "Percent Reporting Frequent Mental Distress",
+    caption = "Frequent mental distress = 14 or more poor mental health days in the past 30 days. Source: CDC BRFSS 2025"
+  ) +
+  scale_y_continuous(
+    limits = c(0, 30),
+    breaks = seq(0, 30, 5)
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    plot.subtitle = element_text(
+      size = 12
+    ),
+    axis.text.x = element_text(
+      angle = 45,
+      hjust = 1,
+      size = 11
+    ),
+    axis.title = element_text(
+      size = 12
+    )
+  )
+```
+
+## Key Findings and Interpretations
+
+Analysis of Georgia BRFSS 2025 data revealed substantial differences in social or emotional support and frequent mental distress across demographic groups. Younger adults experienced the highest prevalence of low social or emotional support. Approximately 32.0% of adults aged 30–34 reported low support compared with 18.0% of adults aged 80 years and older. Younger adults also reported the highest levels of frequent mental distress, particularly among adults aged 25–34 years.
+
+Household income showed some of the strongest differences in the analysis. Adults with annual household incomes below $15,000 reported low social or emotional support at rates exceeding 40%, whereas adults with incomes of $200,000 or greater reported rates below 10%. Frequent mental distress followed a similar trend, suggesting a greater burden among lower-income populations.
+
+Differences were also observed across racial and ethnic groups. Hispanic adults reported the highest prevalence of low social or emotional support, while White non-Hispanic adults reported the lowest prevalence. Multiracial adults reported the highest prevalence of frequent mental distress among the groups examined.
+
+The findings indicate that social or emotional support deficits and mental distress are not evenly distributed across Georgia's adult population. Younger adults, lower-income adults, and several racial and ethnic minority populations experienced a greater burden than other groups. 
+
+## Public Health Implications
+
+The findings demonstrate opportunities for targeted public health interventions designed to strengthen social connectedness and emotional support among Georgia adults. Younger adults and lower-income populations consistently experienced a greater burden of low support and mental distress, suggesting these groups may benefit from focused outreach and community-based support initiatives. Public health agencies, healthcare organizations, community mental health programs, and nonprofit organizations may use these findings to guide resource allocation and program planning. Efforts that promote social connection, peer support, community engagement, and access to mental health resources may help reduce disparities and improve overall well-being. 
+
+## Limitations
+
+Several limitations should be considered when interpreting these findings. First, BRFSS data are self-reported and may be subject to recall bias or social desirability bias. Second, the analysis is cross-sectional and cannot establish causal relationships between social or emotional support and mental distress. Third, some demographic groups may contain smaller sample sizes than others, which can affect estimate stability. Finally, the findings represent adults participating in the Georgia BRFSS survey and may not fully represent every adult living in the state.
+
+## Data Sources and Methods
+
+This project used data from the 2025 Behavioral Risk Factor Surveillance System (BRFSS), a nationwide surveillance system administered by the Centers for Disease Control and Prevention (CDC) to monitor health conditions, risk factors, and health behaviors among adults in the United States. The analysis was limited to Georgia respondents by filtering records with a state code of 13. The variables examined included social and emotional support (EMTSUPRT), mental health status (MENTHLTH), age group (_AGEG5YR), sex (SEXVAR), household income (INCOME3), and race/ethnicity (_RACEGR3). The 2025 BRFSS public-use dataset contains 356,158 records and 284 variables.
+
+Several variables were recoded to support the analysis. Low social or emotional support was defined as respondents reporting that they received needed support only sometimes, rarely, or never (EMTSUPRT = 3, 4, or 5). Frequent mental distress was defined as experiencing poor mental health on 14 or more days during the past 30 days. Respondents reporting no poor mental health days (MENTHLTH = 88) were classified as not experiencing frequent mental distress, while responses coded as refused, don't know, or missing were excluded when appropriate.
+
+Descriptive analyses were conducted to examine differences in low social or emotional support and frequent mental distress across age, sex, household income, and racial/ethnic groups. Summary tables and visualizations were created in R using the tidyverse package suite. The visualizations were designed to identify demographic groups experiencing a greater burden of emotional support deficits and mental distress and to support public health planning, community outreach efforts, and resource allocation within Georgia.
+
+## References
+
+Centers for Disease Control and Prevention. (2025). *Behavioral Risk Factor Surveillance System annual survey data*. https://www.cdc.gov/brfss/annual_data/annual_2025.html
+
+CDC. (2024). *Social connection*. Social Connection; CDC. https://www.cdc.gov/social-connectedness/about/index.html
+
+Centers for Disease Control and Prevention. (2024, May 15). *Health effects of social isolation and loneliness*. Social Connection; CDC. https://www.cdc.gov/social-connectedness/risk-factors/index.html
+
+Centers for Disease Control and Prevention. (2025). *Behavioral Risk Factor Surveillance System (BRFSS) 2025 annual data*. CDC.
+
+Drageset, J. (2021). *Social support* (G. Haugan & M. Eriksson, Eds.). Springer. https://www.ncbi.nlm.nih.gov/books/NBK585650/
+
+Substance Abuse and Mental Health Services Administration. (2023). *Four types of social support. In Advisory: Peer support services in crisis care*. National Center for Biotechnology Information. https://www.ncbi.nlm.nih.gov/books/NBK601481/box/ch4.b43/
+
+Wickramaratne, P. J., Yangchen, T., Lepow, L., Patra, B. G., Glicksburg, B., Talati, A., Adekkanattu, P., Ryu, E., Biernacka, J. M., Charney, A., Mann, J. J., Pathak, J., Olfson, M., & Weissman, M. M. (2022). Social connectedness as a determinant of mental health: A scoping review. *PLOS ONE, 17*(10), e0275004. https://doi.org/10.1371/journal.pone.0275004
+
+World Health Organization. (2025, June 30). *Social connection*. https://www.who.int/news-room/questions-and-answers/item/social-connection
+
+

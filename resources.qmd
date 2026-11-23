@@ -1,0 +1,33 @@
+---
+title: "Resources"
+format: html
+editor: visual
+---
+
+## Mental Health and Social Connection Resources
+
+The following organizations and resources provide information, support services, educational materials, and community-based opportunities related to mental health, emotional support, stress management, and social connection.
+
+The Mental Health Coalition
+[Resource Library](https://www.thementalhealthcoalition.org/resources/)
+
+BrightLove Project
+[Mental Health Organizations](https://www.brightloveproject.org/mental-health-organizations)
+
+National Institutes of Health (NIH)
+[Social Wellness Toolkit](https://www.nih.gov/health-information/your-healthiest-self-wellness-toolkits/social-wellness-toolkit)
+
+American Psychological Association (APA)
+[Ways to Manage Stress Through Social Support](https://www.apa.org/topics/stress/manage-social-support)
+
+NAMI Georgia
+[Support Groups](https://namiga.org/support-and-education/support-groups/)
+
+Commit to Connect
+[Staying Connected](https://committoconnect.org/connect-with-others/)
+
+Georgia Mental Health Consumer Network
+[Peer2Peer Warm Line (24/7)](https://www.gmhcn.org/peer2peer-warm-line)
+
+Joiner
+[Social Activities and Social Success](https://getjoiner.com/blog/best-social-activities-to-meet-new-people)

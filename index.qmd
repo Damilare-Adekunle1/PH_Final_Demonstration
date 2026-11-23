@@ -1,0 +1,33 @@
+---
+title: "Home"
+format: html
+editor: visual
+---
+
+# Social Connection, Emotional Support, and Mental Distress Among Georgia Adults
+
+This website presents findings from a public health data visualization project examining social connection, emotional support, and frequent mental distress among adults in Georgia using 2025 Behavioral Risk Factor Surveillance System (BRFSS) data. 
+
+## Why This Is Important
+
+Social connection refers to the relationships people have and the support they receive from those relationships. Strong social connections can provide belonging, encouragement, and emotional support, while limited connections may increase vulnerability to poor mental health outcomes. 
+
+Emotional support represents one important component of social connection and includes understanding, acceptance, compassion, and encouragement from others. Research suggests that strong emotional support can promote well-being, whereas limited support may contribute to psychological distress. 
+
+## Purpose
+
+The purpose of this project is to examine social and emotional support and frequent mental distress among adults in Georgia using CDC BRFSS data. The project also seeks to identify demographic groups experiencing higher levels of support deficits and mental distress to inform public health outreach efforts and resource allocation.
+
+## Key Findings
+
+- Younger adults reported the highest levels of low social and emotional support.
+
+- Lower-income adults reported substantially higher levels of low support and mental distress.
+
+- Differences were observed across racial and ethnic groups.
+
+- Multiracial adults reported the highest prevalence of frequent mental distress.
+
+## Full Analysis
+
+[View the complete analysis here](Final_Proposal_Project_Doc.qmd)
