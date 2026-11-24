@@ -1,5 +1,5 @@
 ---
-title: "final-proposal-project"
+title: "Examining Social Connection, Emotional Support, and Mental Distress Among Georgia Adults"
 author: "Oluwadamilare 'Damilare' Adekunle"
 format: html
 execute:
@@ -10,48 +10,52 @@ execute:
 editor: visual
 ---
 
-## Examining Social Connection, Emotional Support, and Mental Distress Among Georgia Adults
+## Introduction
 
-Social connection encompasses the number and variety of a person’s relationships, the roles those relationships play in daily life, and whether they provide positive support or create strain (CDC, 2024). It describes how individuals connect with others and the extent to which those relationships provide support, belonging, and substantial engagement. When this connection diminishes, social disconnection may occur. Two of which are social isolation (limited roles and engagement with others) and loneliness (dissatisfaction with one’s level of social connection) (World Health Organization, 2025). These suggest the challenges that may occur when social connection is not met. These forms (i.e., loneliness and social isolation) affect some populations more frequently, including older adults, young adults, individuals living alone, immigrants, adults identifying as sexual minorities, and financially vulnerable adults, while making individuals more vulnerable to depression, dementia, self-harm, type 2 diabetes, anxiety, stroke, and suicide-related outcomes (Centers for Disease Control and Prevention, 2024). 
+Social connection encompasses the number and variety of a person’s relationships, the roles those relationships play in daily life, and whether they provide positive support or create strain (CDC, 2024). It describes how individuals connect with others and the extent to which those relationships provide support, belonging, and substantial engagement. When this connection diminishes, social disconnection may occur. Two of which are social isolation (limited roles and engagement with others) and loneliness (dissatisfaction with one’s level of social connection) (World Health Organization, 2025). These suggest the challenges that may occur when social connection is not met. These forms (i.e., loneliness and social isolation) affect some populations more frequently, including older adults, young adults, individuals living alone, immigrants, adults identifying as sexual minorities, and financially vulnerable adults, while making individuals more vulnerable to depression, dementia, self-harm, type 2 diabetes, anxiety, stroke, and suicide-related outcomes (Centers for Disease Control and Prevention, 2024).
 
-More importantly, social connection is linked to several components, one of which is emotional support. Emotional support is a form of social support which involves understanding, acceptance, compassion, and genuine concern (Drageset, 2021; Substance Abuse and Mental Health Services Administration, 2023). This indicates a sense of support where positive and reliable emotional exchanges exist. Emotional support plays a crucial role in the well-being and health of individuals, as well as providing perceived stability (Drageset, 2021), illustrating its significance in the lives of individuals. According to CDC (2024), social connections provide individuals with emotional support, which individuals can benefit from when facing both difficult and good moments. This indicates the level of encouragement that can be provided when positive life experiences and challenging situations occur. 
+More importantly, social connection is linked to several components, one of which is emotional support. Emotional support is a form of social support which involves understanding, acceptance, compassion, and genuine concern (Drageset, 2021; Substance Abuse and Mental Health Services Administration, 2023). This indicates a sense of support where positive and reliable emotional exchanges exist. Emotional support plays a crucial role in the well-being and health of individuals, as well as providing perceived stability (Drageset, 2021), illustrating its significance in the lives of individuals. According to CDC (2024), social connections provide individuals with emotional support, which individuals can benefit from when facing both difficult and good moments. This indicates the level of encouragement that can be provided when positive life experiences and challenging situations occur.
 
-Furthermore, individuals who have limited meaningful interactions, support systems, or a sense of belonging are more likely to experience emotional challenges such as depressive symptoms, anxious feelings, self-harming thoughts, and poorer psychological well-being over time (Centers for Disease Control and Prevention, 2024). This suggests that people tend to experience poorer emotional health when they lack strong relationships and regular engagement with others. A broad review of longitudinal studies also found that people who maintain stronger relationships, dependable support systems, and regular engagement with others generally report fewer symptoms associated with depression and anxiety, whereas those with weaker interpersonal ties face greater psychological difficulties over time (Wickramaratne et al., 2022). This indicates that having dependable people in one's life may help protect against emotional strain and psychological distress. Authors of these studies also explained that feelings of disconnection and the absence of close interpersonal bonds were consistently linked to greater emotional difficulties, with several studies showing that these experiences often preceded increases in depressive and anxiety-related symptoms (Wickramaratne et al., 2022). This suggests that emotional separation from others may contribute to later declines in psychological well-being. 
+Furthermore, individuals who have limited meaningful interactions, support systems, or a sense of belonging are more likely to experience emotional challenges such as depressive symptoms, anxious feelings, self-harming thoughts, and poorer psychological well-being over time (Centers for Disease Control and Prevention, 2024). This suggests that people tend to experience poorer emotional health when they lack strong relationships and regular engagement with others. A broad review of longitudinal studies also found that people who maintain stronger relationships, dependable support systems, and regular engagement with others generally report fewer symptoms associated with depression and anxiety, whereas those with weaker interpersonal ties face greater psychological difficulties over time (Wickramaratne et al., 2022). This indicates that having dependable people in one's life may help protect against emotional strain and psychological distress. Authors of these studies also explained that feelings of disconnection and the absence of close interpersonal bonds were consistently linked to greater emotional difficulties, with several studies showing that these experiences often preceded increases in depressive and anxiety-related symptoms (Wickramaratne et al., 2022). This suggests that emotional separation from others may contribute to later declines in psychological well-being.
 
-Nonetheless, there are resources and organizations that support and ensure social connection, peer support, community care, emotional support are provided, ensuring that there are support systems for mental health. Some of these are state agencies, local partners, communities, and non-profit organizations, such as Mental Health America (MHA), 988 suicide and crisis lifeline, GUIDE Inc., National Alliance on Mental Illness (NAMI), and The Trevor Project. The audience for this project extends to community mental health centers, program managers planning mental and wellness initiatives, nonprofits (serving low-income adults and minority communities), faith-based organization, and policymakers allocating resources to improve social connection and emotional support, in a way depicting the goal of this project. The purpose of this project is to examine social and emotional support and frequent mental distress among adults in Georgia using CDC BRFSS data. The project also seeks to identify demographic groups that experience higher levels of emotional or social support deficits and mental distress to inform public health programs, outreach efforts, and resource allocation. 
+Nonetheless, there are resources and organizations that support and ensure social connection, peer support, community care, emotional support are provided, ensuring that there are support systems for mental health. Some of these are state agencies, local partners, communities, and non-profit organizations, such as Mental Health America (MHA), 988 suicide and crisis lifeline, GUIDE Inc., National Alliance on Mental Illness (NAMI), and The Trevor Project. The audience for this project extends to community mental health centers, program managers planning mental and wellness initiatives, nonprofits (serving low-income adults and minority communities), faith-based organization, and policymakers allocating resources to improve social connection and emotional support, in a way depicting the goal of this project. The purpose of this project is to examine social and emotional support and frequent mental distress among adults in Georgia using CDC BRFSS data. The project also seeks to identify demographic groups that experience higher levels of emotional or social support deficits and mental distress to inform public health programs, outreach efforts, and resource allocation.
 
-
-## Loading the XPT File and Needed Packages
 
 ```{r, echo = FALSE}
+# Loading the XPT File and Needed Packages
+
 library(haven)
 library(tidyverse)
 library(dplyr)
 library(knitr)
+library(DT)
+library(plotly)
 
 brfss <- read_xpt("data/LLCP2025.XPT")
 ```
 
-## BRFSS Entire Dataset
+## The BRFSS Entire Dataset
 
 ```{r, echo = FALSE}
 nrow(brfss)
 # to check the dataset
 ```
 
-## Filtering to Intended State (Georgia = 13)
 
 ```{r, echo = FALSE}
+# Filtering to Intended State (Georgia = 13)
+
 ga <- brfss %>%
   filter(`_STATE` == 13)
 
-glimpse(ga)
+# glimpse(ga)
 # Georgia numerical code is 13
 ```
 
-## Creating the Analysis Variable
 
 ```{r, echo = FALSE}
+# Creating the Analysis Variable 
+
 ga_checked <- ga %>%
   mutate(
     # EMTSUPRT codes: 1=Always, 2=Usually, 3=Sometimes, 4=Rarely, 5=Never
@@ -114,12 +118,24 @@ summary_by_age <- ga_checked %>%
   ) %>%
   group_by(age_group) %>%
   summarize(
-    pct_low_support = mean(support_low, na.rm = TRUE) * 100,
-    pct_mental_distress = mean(mental_distress, na.rm = TRUE) * 100
+    pct_low_support = round(mean(support_low, na.rm = TRUE) * 100, 2),
+    pct_mental_distress = round(mean(mental_distress, na.rm = TRUE) * 100, 2)
   )
 
-knitr::kable(summary_by_age, caption = "Summary by Age Group")
-
+datatable(
+  summary_by_age,
+  caption = "Summary by Age Group",
+  rownames = FALSE,
+  extensions = "Buttons",
+  options = list(
+    pageLength = 14,
+    scrollX = TRUE,
+    autoWidth = TRUE,
+    dom = "Bfrtip",
+    buttons = c("copy", "csv", "excel")
+  ),
+  class = "compact stripe hover"
+) 
 ```
 
 ### Sex SubGroup
@@ -129,11 +145,24 @@ summary_by_sex <- ga_checked %>%
   mutate(sex = ifelse(sex ==1, "Male", "Female")) %>%
   group_by(sex) %>%
   summarize(
-    pct_low_support = mean(support_low, na.rm = TRUE) * 100,
-    pct_mental_distress = mean(mental_distress, na.rm = TRUE) * 100
+    pct_low_support = round(mean(support_low, na.rm = TRUE) * 100, 2),
+    pct_mental_distress = round(mean(mental_distress, na.rm = TRUE) * 100, 2)
   )
 
-knitr::kable(summary_by_sex, caption = "Summary by Sex Group")
+datatable(
+  summary_by_sex,
+  caption = "Summary by Sex Group",
+  rownames = FALSE,
+  extensions = "Buttons",
+  options = list(
+    pageLength = 5,
+    scrollX = TRUE,
+    autoWidth = TRUE, 
+    dom = "Bfrtip",
+    buttons = c("copy", "csv", "excel")
+  ),
+  class = "compact stripe hover"
+) 
 ```
 
 ### Income
@@ -166,11 +195,24 @@ summary_by_income <- ga_checked %>%
   ) %>% 
   group_by(income) %>%
   summarize(
-    pct_low_support = mean(support_low, na.rm = TRUE) * 100,
-    pct_mental_distress = mean(mental_distress, na.rm = TRUE) * 100
+    pct_low_support = round(mean(support_low, na.rm = TRUE) * 100, 2),
+    pct_mental_distress = round(mean(mental_distress, na.rm = TRUE) * 100, 2)
   )
 
-knitr::kable(summary_by_income, caption = "Summary by Income Group")
+datatable(
+  summary_by_income,
+  caption = "Summary by Income Group",
+  rownames = FALSE,
+  extensions = "Buttons",
+  options = list(
+    pageLength = 15,
+    scrollX = TRUE,
+    autoWidth = TRUE,
+    dom = "Bfrtip",
+    buttons = c("copy", "csv", "excel")
+  ),
+  class = "compact stripe hover"
+) 
 ```
 
 ### Race/Ethnicity
@@ -194,11 +236,24 @@ summary_by_race <- ga_checked %>%
   ) %>%
   group_by(race_ethnicity) %>%
   summarize(
-    pct_low_support = mean(support_low, na.rm = TRUE) * 100,
-    pct_mental_distress = mean(mental_distress, na.rm = TRUE) * 100
+    pct_low_support = round(mean(support_low, na.rm = TRUE) * 100, 2), 
+    pct_mental_distress = round(mean(mental_distress, na.rm = TRUE) * 100, 2) 
   )
 
-knitr::kable(summary_by_race, caption = "Summary by Race/Ethnicity Group")
+datatable(
+  summary_by_race,
+  caption = "Summary by Race/Ethnicity Group",
+  rownames = FALSE,
+  extensions = "Buttons",
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE,
+    autoWidth = TRUE,
+    dom = "Bfrtip",
+    buttons = c("copy", "csv", "excel")
+  ),
+  class = "compact stripe hover"
+) 
 ```
 
 ## Creating the Explanatory Visualizations (Each Subgroups)
@@ -439,6 +494,17 @@ ggplot(
   )
 ```
 
+## Technologies Used
+
+- R
+
+- Quarto
+
+- tidyverse
+
+- ggplot2
+
+
 ## Key Findings and Interpretations
 
 Analysis of Georgia BRFSS 2025 data revealed substantial differences in social or emotional support and frequent mental distress across demographic groups. Younger adults experienced the highest prevalence of low social or emotional support. Approximately 32.0% of adults aged 30–34 reported low support compared with 18.0% of adults aged 80 years and older. Younger adults also reported the highest levels of frequent mental distress, particularly among adults aged 25–34 years.
@@ -447,11 +513,11 @@ Household income showed some of the strongest differences in the analysis. Adult
 
 Differences were also observed across racial and ethnic groups. Hispanic adults reported the highest prevalence of low social or emotional support, while White non-Hispanic adults reported the lowest prevalence. Multiracial adults reported the highest prevalence of frequent mental distress among the groups examined.
 
-The findings indicate that social or emotional support deficits and mental distress are not evenly distributed across Georgia's adult population. Younger adults, lower-income adults, and several racial and ethnic minority populations experienced a greater burden than other groups. 
+The findings indicate that social or emotional support deficits and mental distress are not evenly distributed across Georgia's adult population. Younger adults, lower-income adults, and several racial and ethnic minority populations experienced a greater burden than other groups.
 
 ## Public Health Implications
 
-The findings demonstrate opportunities for targeted public health interventions designed to strengthen social connectedness and emotional support among Georgia adults. Younger adults and lower-income populations consistently experienced a greater burden of low support and mental distress, suggesting these groups may benefit from focused outreach and community-based support initiatives. Public health agencies, healthcare organizations, community mental health programs, and nonprofit organizations may use these findings to guide resource allocation and program planning. Efforts that promote social connection, peer support, community engagement, and access to mental health resources may help reduce disparities and improve overall well-being. 
+The findings demonstrate opportunities for targeted public health interventions designed to strengthen social connectedness and emotional support among Georgia adults. Younger adults and lower-income populations consistently experienced a greater burden of low support and mental distress, suggesting these groups may benefit from focused outreach and community-based support initiatives. Public health agencies, healthcare organizations, community mental health programs, and nonprofit organizations may use these findings to guide resource allocation and program planning. Efforts that promote social connection, peer support, community engagement, and access to mental health resources may help reduce disparities and improve overall well-being.
 
 ## Limitations
 
@@ -482,5 +548,3 @@ Substance Abuse and Mental Health Services Administration. (2023). *Four types o
 Wickramaratne, P. J., Yangchen, T., Lepow, L., Patra, B. G., Glicksburg, B., Talati, A., Adekkanattu, P., Ryu, E., Biernacka, J. M., Charney, A., Mann, J. J., Pathak, J., Olfson, M., & Weissman, M. M. (2022). Social connectedness as a determinant of mental health: A scoping review. *PLOS ONE, 17*(10), e0275004. https://doi.org/10.1371/journal.pone.0275004
 
 World Health Organization. (2025, June 30). *Social connection*. https://www.who.int/news-room/questions-and-answers/item/social-connection
-
-
