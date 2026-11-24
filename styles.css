@@ -1,0 +1,120 @@
+/* ===== Global Colors ===== */
+
+:root {
+  --dark-blue: #12355b;
+  --light-blue: #dceefb;
+  --accent-blue: #3498db;
+  --light-gray: #f4f6f8;
+  --medium-gray: #6c757d;
+  --white: #ffffff;
+}
+
+/* ===== Page Background ===== */
+
+body {
+  background-color: var(--light-gray);
+  color: #222222;
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.7;
+}
+
+/* ===== Main Content ===== */
+
+.quarto-container,
+.main-content,
+.content {
+  background-color: var(--white);
+}
+
+/* ===== Navigation Bar ===== */
+
+.navbar {
+  background-color: var(--dark-blue) !important;
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+  color: white !important;
+  font-weight: 600;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--light-blue) !important;
+}
+
+/* ===== Headings ===== */
+
+h1 {
+  color: var(--dark-blue);
+  border-bottom: 4px solid var(--accent-blue);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  color: var(--dark-blue);
+  margin-top: 2rem;
+}
+
+h3 {
+  color: var(--accent-blue);
+}
+
+/* ===== Links ===== */
+
+a {
+  color: var(--accent-blue);
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--dark-blue);
+}
+
+/* ===== Tables ===== */
+
+table {
+  background-color: white;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: var(--dark-blue);
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: var(--light-blue);
+}
+
+/* ===== Images ===== */
+
+img {
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ===== Figures ===== */
+
+.figure,
+.quarto-figure {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ===== Callout Boxes ===== */
+
+.callout {
+  border-left: 5px solid var(--accent-blue);
+  background-color: var(--light-blue);
+}
+
+/* ===== Footer ===== */
+
+footer {
+  color: var(--medium-gray);
+}
